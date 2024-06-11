@@ -10,16 +10,24 @@ export default function Home() {
     router.push('/login');
   };
 
-  const navigateToOneTimeLink = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
   };
+
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Git Scanner</h1>
-      <div className={styles.buttonContainer}>
-        <button className={styles.button}>Try it</button>
-        <button className={styles.button} onClick={navigateToLogin}>Login</button>
-      </div>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className={styles.roundedInput}
+          placeholder="Enter text"
+        />
+        <button type="submit" className={styles.submitButton}>
+          Submit
+        </button>
+      </form>
     </div>
   );
 }

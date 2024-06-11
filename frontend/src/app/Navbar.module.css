@@ -1,0 +1,40 @@
+/* components/Navbar.module.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #b5aaaa;
+    color: #fff;
+  }
+  
+  .navList {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    margin-left:90%;
+  }
+  
+  .navItem {
+    margin: 0 10px;
+  }
+
+  
+  .navLink {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .loginButton {
+    background-color: #fff;
+    color: #010000;
+    padding: 5px 10px;
+    border-radius: 3px;
+    text-decoration: none;
+  }
+  
+  .loginButton:hover {
+    background-color: #78e385;
+  }
+  

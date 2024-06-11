@@ -34,4 +34,34 @@
   .button:hover {
     background-color: rgb(235, 243, 235);
   }
+
+  .form {
+    display: flex;
+    align-items: center;
+    
+  }
+  
+  .roundedInput {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    font-size: 1rem;
+    margin-right: 10px;
+    width: 60rem;
+    background-color: #ebebeb;
+  }
+  
+  .submitButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background-color: #0070f3;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .submitButton:hover {
+    background-color: #005bb5;
+  }
   
