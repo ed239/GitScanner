@@ -14,6 +14,14 @@
     margin-bottom: 20px;
     color: black;
   }
+
+  .form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
   
   .buttonContainer {
     display: flex;
@@ -49,6 +57,7 @@
     margin-right: 10px;
     width: 60rem;
     background-color: #ebebeb;
+    color:black;
   }
   
   .submitButton {
@@ -63,5 +72,15 @@
   
   .submitButton:hover {
     background-color: #005bb5;
+  }
+
+  .repoInfo {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 100%;
+    max-width: 600px;
+    color:black;
   }
   
