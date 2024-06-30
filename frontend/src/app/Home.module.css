@@ -7,6 +7,7 @@
     justify-content: center;
     height: 100vh;
     background-color: #a8e992;
+    color:black;
   }
   
   .title {
@@ -82,5 +83,42 @@
     width: 100%;
     max-width: 600px;
     color:black;
+    overflow-y: scroll;
   }
+
+  .infoContainer {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    justify-content: center;
+    
+  }
+  
+  .infoBox {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .infoTitle {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: black;
+    justify-content: center;
+
+  }
+
+  .textBold {
+    color: black;
+
+  }
+
+
+
+
+  
   
