@@ -2,8 +2,10 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import styles from './Home.module.css';
+import jsPDF from 'jspdf';
 import { useState } from 'react';
 import axios from 'axios';
+import generatePDF from '../pdfGenerator';
 
 // export default function Home() {
 //   const router = useRouter();
@@ -49,12 +51,12 @@ export default function Home() {
     const match = link.match(regex);
     if (!match) {
       setError('Invalid GitHub repository link');
-      console.error('Invalid GitHub repository link'); // Log invalid link error
+      console.error('Invalid GitHub repository link'); 
       return;
     }
 
-    const repoPath = match[1]; // Extracting the repository path from the match
-    console.log(`Extracted repo path: ${repoPath}`); // Log the extracted repo path
+    const repoPath = match[1]; 
+    console.log(`Extracted repo path: ${repoPath}`); 
 
     try {
 
@@ -65,6 +67,14 @@ export default function Home() {
     } catch (err) {
       setError('Error fetching repository information');
       console.error(err);
+    }
+  };
+
+  const handleGeneratePDF = () => {
+    if (repoInfo) {
+      generatePDF(repoInfo);
+    } else {
+      console.error('No repository info available to generate PDF.');
     }
   };
 
@@ -82,6 +92,7 @@ export default function Home() {
         <button type="submit" className={styles.submitButton} >
           Submit
         </button>
+        <button onClick={handleGeneratePDF} className={styles.submitButton}>Download PDF</button>
       </form>
       {error && <p className={styles.error}>{error}</p>}
       {repoInfo && (
@@ -111,10 +122,10 @@ export default function Home() {
             <p>No contributors found.</p>
           )}
 
+          
 
-
-        </div>
-      )}
+        </div> 
+     )}
     </div>
   );
 }
