@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: center;
     /* height: 100vh; */
+    
     background-color: #a8e992;
     color:black;
     overflow-y: scroll;
@@ -16,6 +17,7 @@
     font-size: 6rem;
     margin-bottom: 20px;
     color: black;
+    margin-top: 10rem;
   }
 
   .form {
@@ -24,6 +26,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    
   }
   
   .buttonContainer {
@@ -117,7 +120,7 @@
     border-radius: 0.8rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    /* overflow-y: auto; */
+    overflow-y: scroll;
     z-index: 1;
   }
   

@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import { useState } from 'react';
 import axios from 'axios';
 import generatePDF from '../pdfGenerator';
+import PieChart from '../PieChart.js';
 
 // export default function Home() {
 //   const router = useRouter();
@@ -64,6 +65,7 @@ export default function Home() {
       console.log(repoPath)
       const response = await axios.post('/api/fetchRepo', { link: repoPath });
       setRepoInfo(response.data);
+      console.log(repoInfo)
     } catch (err) {
       setError('Error fetching repository information');
       console.error(err);
@@ -109,21 +111,50 @@ export default function Home() {
             </div>
 
             <div className={styles.infoBox}>
-              <h2 className={styles.infoTitle}>Contributors</h2>
+              <h2 className={styles.infoTitle}>Contributor Commits</h2>
               {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
                 <ul>
                   {repoInfo.contributors.map((contributor) => (
                     <li key={contributor.id}>
+                      
                       <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
-                        {contributor.login} ({contributor.contributions} contributions)
+                      {contributor.login}: {contributor.contributions} 
                       </a>
-                      <p>Pull Requests: {repoInfo.pullRequestsByContributor[contributor.login] || 0}</p>
+                      
+                      
                     </li>
+                    
+                    
                   ))}
                 </ul>
+                
               ) : (
                 <p>No contributors found.</p>
               )}
+
+              <PieChart contributors={repoInfo.contributors} type="commits" />
+            </div>
+
+            <div className={styles.infoBox}>
+              <h2 className={styles.infoTitle}>Contributor Pull Requests</h2>
+              {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
+                <ul>
+                  {repoInfo.contributors.map((contributor) => (
+                    <li key={contributor.id}>
+                      <p>{contributor.login}: {repoInfo.pullRequestsByContributor[contributor.login] || 0}</p>
+                      
+                    
+                    </li>
+                    
+                  ))}
+                </ul>
+                
+              ) : (
+                <p>No contributors found.</p>
+              )}
+              
+              <PieChart contributors={repoInfo.contributors} type="pr" />
+              {/* <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} /> */}
             </div>
 
             
