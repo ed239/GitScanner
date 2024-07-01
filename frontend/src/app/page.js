@@ -96,7 +96,60 @@ export default function Home() {
       </form>
       {error && <p className={styles.error}>{error}</p>}
       {repoInfo && (
-        <div className={styles.repoInfo}>
+
+        <div className={styles.infoContainer}>
+          <div className={styles.infoBox}>
+              <h2 className={styles.infoTitle}>Repository Information</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+              <p><strong>Created:</strong> {repoInfo.repoData.created_at}</p>
+              <p><strong>Updated:</strong> {repoInfo.repoData.updated_at}</p>
+              <p><strong>Language:</strong> {repoInfo.repoData.language}</p>
+              <p><strong>Size:</strong> {repoInfo.repoData.size}</p>
+              <p><strong>Number of Pull Requests:</strong> {repoInfo.pulls.length}</p>
+            </div>
+
+            <div className={styles.infoBox}>
+              <h2 className={styles.infoTitle}>Contributors</h2>
+              {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
+                <ul>
+                  {repoInfo.contributors.map((contributor) => (
+                    <li key={contributor.id}>
+                      <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
+                        {contributor.login} ({contributor.contributions} contributions)
+                      </a>
+                      <p>Pull Requests: {repoInfo.pullRequestsByContributor[contributor.login] || 0}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No contributors found.</p>
+              )}
+            </div>
+
+            
+            <div className={styles.infoBox}>
+              <h2>Repository Info2</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            </div>
+            <div className={styles.infoBox}>
+              <h2>Repository Info2</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            </div>
+            <div className={styles.infoBox}>
+              <h2>Repository Info2</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            </div>
+            
+        </div>
+        
+
+        
+     )}
+    </div>
+  );
+}
+
+{/* <div className={styles.repoInfo}>
           <h2>Repository Info</h2>
           <p><strong>Name:</strong> {repoInfo.name}</p>
           <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
@@ -124,8 +177,4 @@ export default function Home() {
 
           
 
-        </div> 
-     )}
-    </div>
-  );
-}
+        </div>  */}

@@ -5,9 +5,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    /* height: 100vh; */
     background-color: #a8e992;
     color:black;
+    overflow-y: scroll;
+    
   }
   
   .title {
@@ -86,21 +88,37 @@
     overflow-y: scroll;
   }
 
+
+
   .infoContainer {
     display: flex;
-    gap: 20px;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+    column-gap: 7rem;
+    row-gap: 5rem;
+    width: 100%; 
+    padding: 1rem;
+    align-items: center;
     justify-content: center;
-    
+    overflow-y: auto;
   }
   
   .infoBox {
     background-color: white;
-    padding: 20px;
+    padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 1;
+    width: 30%; 
+    height:30rem;
+    min-height: 15rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-items: center;
     justify-content: center;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* overflow-y: auto; */
+    z-index: 1;
   }
   
   .infoTitle {
@@ -109,11 +127,14 @@
     margin-bottom: 10px;
     color: black;
     justify-content: center;
+    align-items: center;
+    text-align: center;
 
   }
 
   .textBold {
     color: black;
+    text-align: center;
 
   }
 
