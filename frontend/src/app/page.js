@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import { useState } from 'react';
 import axios from 'axios';
 import generatePDF from '../pdfGenerator';
+import PieChart from '../PieChart.js';
 
 // export default function Home() {
 //   const router = useRouter();
@@ -64,6 +65,7 @@ export default function Home() {
       console.log(repoPath)
       const response = await axios.post('/api/fetchRepo', { link: repoPath });
       setRepoInfo(response.data);
+      console.log(repoInfo)
     } catch (err) {
       setError('Error fetching repository information');
       console.error(err);
@@ -96,7 +98,89 @@ export default function Home() {
       </form>
       {error && <p className={styles.error}>{error}</p>}
       {repoInfo && (
-        <div className={styles.repoInfo}>
+
+        <div className={styles.infoContainer}>
+          <div className={styles.infoBox}>
+              <h2 className={styles.infoTitle}>Repository Information</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+              <p><strong>Created:</strong> {repoInfo.repoData.created_at}</p>
+              <p><strong>Updated:</strong> {repoInfo.repoData.updated_at}</p>
+              <p><strong>Language:</strong> {repoInfo.repoData.language}</p>
+              <p><strong>Size:</strong> {repoInfo.repoData.size}</p>
+              <p><strong>Number of Pull Requests:</strong> {repoInfo.pulls.length}</p>
+            </div>
+
+            <div className={styles.infoBox}>
+              <h2 className={styles.infoTitle}>Contributor Commits</h2>
+              {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
+                <ul>
+                  {repoInfo.contributors.map((contributor) => (
+                    <li key={contributor.id}>
+                      
+                      <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
+                      {contributor.login}: {contributor.contributions} 
+                      </a>
+                      
+                      
+                    </li>
+                    
+                    
+                  ))}
+                </ul>
+                
+              ) : (
+                <p>No contributors found.</p>
+              )}
+
+              <PieChart contributors={repoInfo.contributors} type="commits" />
+            </div>
+
+            <div className={styles.infoBox}>
+              <h2 className={styles.infoTitle}>Contributor Pull Requests</h2>
+              {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
+                <ul>
+                  {repoInfo.contributors.map((contributor) => (
+                    <li key={contributor.id}>
+                      <p>{contributor.login}: {repoInfo.pullRequestsByContributor[contributor.login] || 0}</p>
+                      
+                    
+                    </li>
+                    
+                  ))}
+                </ul>
+                
+              ) : (
+                <p>No contributors found.</p>
+              )}
+              
+              <PieChart contributors={repoInfo.contributors} type="pr" />
+              {/* <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} /> */}
+            </div>
+
+            
+            <div className={styles.infoBox}>
+              <h2>Repository Info2</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            </div>
+            <div className={styles.infoBox}>
+              <h2>Repository Info2</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            </div>
+            <div className={styles.infoBox}>
+              <h2>Repository Info2</h2>
+              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            </div>
+            
+        </div>
+        
+
+        
+     )}
+    </div>
+  );
+}
+
+{/* <div className={styles.repoInfo}>
           <h2>Repository Info</h2>
           <p><strong>Name:</strong> {repoInfo.name}</p>
           <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
@@ -124,8 +208,4 @@ export default function Home() {
 
           
 
-        </div> 
-     )}
-    </div>
-  );
-}
+        </div>  */}
