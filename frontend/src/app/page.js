@@ -60,12 +60,9 @@ export default function Home() {
     console.log(`Extracted repo path: ${repoPath}`); 
 
     try {
-
-
-      console.log(repoPath)
       const response = await axios.post('/api/fetchRepo', { link: repoPath });
       setRepoInfo(response.data);
-      console.log(repoInfo)
+      
     } catch (err) {
       setError('Error fetching repository information');
       console.error(err);
@@ -79,7 +76,7 @@ export default function Home() {
       console.error('No repository info available to generate PDF.');
     }
   };
-
+  
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Git Scanner</h1>
@@ -132,7 +129,8 @@ export default function Home() {
                 <p>No contributors found.</p>
               )}
 
-              <PieChart contributors={repoInfo.contributors} type="commits" />
+              {/* <PieChart contributors={repoInfo.contributors} type="commits" /> */}
+              <PieChart contributors={repoInfo.contributors} type="commits" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
             </div>
 
             <div className={styles.infoBox}>
@@ -153,13 +151,14 @@ export default function Home() {
                 <p>No contributors found.</p>
               )}
               
-              <PieChart contributors={repoInfo.contributors} type="pr" />
-              {/* <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} /> */}
+              {/* <PieChart contributors={repoInfo.contributors} type="pr" /> */}
+              <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
             </div>
 
             
             <div className={styles.infoBox}>
               <h2>Repository Info2</h2>
+             
               <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
             </div>
             <div className={styles.infoBox}>
