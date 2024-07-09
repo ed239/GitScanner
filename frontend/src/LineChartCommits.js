@@ -3,7 +3,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-const LineChartCommits = ({ commits }) => {
+const LineChartCommits = ({ commits, allContributors }) => {
   const processCommits = (commits) => {
     const commitData = {};
     commits.forEach(commit => {
@@ -18,11 +18,29 @@ const LineChartCommits = ({ commits }) => {
       }
       commitData[author][date]++;
     });
+
+// console.log(allContributors)
+//   allContributors.forEach(author => {
+//     console.log(author.login)
+//     if (!commitData[author.login]) {
+//       commitData[author.login] = {};
+//     }
+//   });
+
     
-console.log(commitData)
+
 const authors = Object.keys(commitData);
 const dates = Array.from(new Set(authors.flatMap(author => Object.keys(commitData[author])))).sort();
 
+// authors.forEach(author => {
+//   dates.forEach(date => {
+//     if (!commitData[author][date]) {
+//       commitData[author][date] = 0;
+//     }
+//   });
+// });
+
+console.log(commitData)
 const datasets = authors.map(author => ({
   label: author,
   data: dates.map(date => commitData[author][date] || 0),
@@ -34,7 +52,7 @@ const datasets = authors.map(author => ({
 return { labels: dates, datasets };
 };
 
-const chartData = processCommits(commits);
+const chartData = processCommits(commits, allContributors);
 
 return (
 

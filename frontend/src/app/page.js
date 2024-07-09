@@ -83,8 +83,16 @@ export default function Home() {
     if (repoInfo) {
       console.log('Updated repoInfo:', repoInfo);
       console.log('Commits:', repoInfo.commits);
+      console.log('Contributors:', repoInfo.contributors);
     }
   }, [repoInfo]);
+
+  const getAllContributors = () => {
+    if (!repoInfo || !repoInfo.contributors) {
+      return [];
+    }
+    return repoInfo.contributors.map(contributor => contributor.login);
+  };
 
   const processCommits = (commits) => {
     const commitData = {};
@@ -190,16 +198,44 @@ export default function Home() {
               <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
             </div>
 
-            
             <div className={styles.infoBox}>
-              <h2>Commits Over Time</h2>
-              <LineChartCommits commits={repoInfo.commits} />
+              <h2>Repository Info2</h2>
+              {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
+                <ul>
+                  {repoInfo.contributors.map((contributor) => (
+                    <li key={contributor.id}>
+                      
+                      <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
+                      {contributor.login}: {contributor.author} 
+                      </a>
+                      
+                      
+                    </li>
+                    
+                    
+                  ))}
+                </ul>
+                
+              ) : (
+                <p>No contributors found.</p>
+              )}
             </div>
+
+            
+            <div className={styles.infoBoxLarge}>
+            <h2 className={styles.infoTitle}>Commits Over Time</h2>
+              <LineChartCommits commits={repoInfo.commits} allContributors={getAllContributors()} />
+            </div>
+
+            
+
+
 
             <div className={styles.infoBox}>
               <h2>Repository Info2</h2>
               <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
             </div>
+
             <div className={styles.infoBox}>
               <h2>Repository Info2</h2>
               <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
