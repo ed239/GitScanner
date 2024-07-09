@@ -41,7 +41,7 @@ const PieChart = ({ contributors, type, pullRequestsByContributor }) => {
     ],
   };
 
-  console.log(contributors)
+ 
 
 
 

@@ -92,6 +92,7 @@ export default async function handler(req, res) {
         commits: commitsData,
         pullRequestsByContributor,
       });
+     
     } catch (error) {
       console.error('GitHub API error:', error);
       res.status(500).json({ error: 'GitHub API error' });
