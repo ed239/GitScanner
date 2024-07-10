@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import styles from './Home.module.css';
 import { useState } from 'react';
 import axios from 'axios';
+import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 // export default function Home() {
 //   const router = useRouter();
@@ -35,6 +37,12 @@ import axios from 'axios';
 // }
 
 export default function Home() {
+
+  const { data: session } = useSession();
+  // if (session === null) {
+  //   redirect("/login");
+  // }
+
   const [link, setLink] = useState('');
   const [repoInfo, setRepoInfo] = useState(null);
   const [error, setError] = useState('');
@@ -52,15 +60,14 @@ export default function Home() {
       console.error('Invalid GitHub repository link'); // Log invalid link error
       return;
     }
-
     const repoPath = match[1]; // Extracting the repository path from the match
     console.log(`Extracted repo path: ${repoPath}`); // Log the extracted repo path
 
     try {
-
-
       console.log(repoPath)
       const response = await axios.post('/api/fetchRepo', { link: repoPath });
+      console.log(response)
+      console.log(response.data);
       setRepoInfo(response.data);
     } catch (err) {
       setError('Error fetching repository information');

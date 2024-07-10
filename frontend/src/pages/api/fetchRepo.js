@@ -48,15 +48,16 @@ export default async function handler(req, res) {
     // if (!GITHUB_TOKEN) {
     //   return res.status(500).json({ error: 'GitHub token not found in environment variables' });
     // }
+    const config = { headers : {
+      'Authorization': `token ${process.env.GITHUB_TOKEN}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'scope': 'repo:status'
+    }};
 
-    // const headers = {
-    //   Authorization: `token ${GITHUB_TOKEN}`,
-    //   Accept: 'application/vnd.github.v3+json',
-    // };
 
     try {
 
-      const repoResponse = await axios.get(`https://api.github.com/repos/${link}`);
+      const repoResponse = await axios.get(`https://api.github.com/repos/${link}`, config);
       const repoData = repoResponse.data;
 
 
