@@ -3,10 +3,11 @@
 import { useRouter } from 'next/navigation';
 import styles from './Home.module.css';
 import jsPDF from 'jspdf';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import generatePDF from '../pdfGenerator';
 import PieChart from '../PieChart.js';
+import LineChartCommits from '../LineChartCommits.js';
 
 // export default function Home() {
 //   const router = useRouter();
@@ -63,6 +64,7 @@ export default function Home() {
       const response = await axios.post('/api/fetchRepo', { link: repoPath });
       setRepoInfo(response.data);
       
+      
     } catch (err) {
       setError('Error fetching repository information');
       console.error(err);
@@ -77,6 +79,47 @@ export default function Home() {
     }
   };
   
+  useEffect(() => {
+    if (repoInfo) {
+      console.log('Updated repoInfo:', repoInfo);
+      console.log('Commits:', repoInfo.commits);
+      console.log('Contributors:', repoInfo.contributors);
+    }
+  }, [repoInfo]);
+
+  const getAllContributors = () => {
+    if (!repoInfo || !repoInfo.contributors) {
+      return [];
+    }
+    return repoInfo.contributors.map(contributor => contributor.login);
+  };
+
+  const processCommits = (commits) => {
+    const commitData = {};
+    commits.forEach(commit => {
+      const date = new Date(commit.date).toLocaleDateString();
+      const author = commit.author;
+      if (!commitData[author]) {
+        commitData[author] = {};
+      }
+      if (!commitData[author][date]) {
+        commitData[author][date] = 0;
+      }
+      commitData[author][date]++;
+    });
+
+    const dates = Array.from(new Set(commits.map(commit => new Date(commit.date).toLocaleDateString()))).sort();
+    const datasets = Object.keys(commitData).map(author => ({
+      label: author,
+      data: dates.map(date => commitData[author][date] || 0),
+      fill: false,
+      borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), // random color
+      tension: 0.1
+    }));
+
+    return { labels: dates, datasets };
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Git Scanner</h1>
@@ -155,16 +198,44 @@ export default function Home() {
               <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
             </div>
 
+            <div className={styles.infoBox}>
+              <h2>Repository Info2</h2>
+              {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
+                <ul>
+                  {repoInfo.contributors.map((contributor) => (
+                    <li key={contributor.id}>
+                      
+                      <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
+                      {contributor.login}: {contributor.author} 
+                      </a>
+                      
+                      
+                    </li>
+                    
+                    
+                  ))}
+                </ul>
+                
+              ) : (
+                <p>No contributors found.</p>
+              )}
+            </div>
+
             
+            <div className={styles.infoBoxLarge}>
+            <h2 className={styles.infoTitle}>Commits Over Time</h2>
+              <LineChartCommits commits={repoInfo.commits} allContributors={getAllContributors()} />
+            </div>
+
+            
+
+
+
             <div className={styles.infoBox}>
               <h2>Repository Info2</h2>
-             
               <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
             </div>
-            <div className={styles.infoBox}>
-              <h2>Repository Info2</h2>
-              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
-            </div>
+
             <div className={styles.infoBox}>
               <h2>Repository Info2</h2>
               <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
