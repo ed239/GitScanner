@@ -7,6 +7,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import generatePDF from '../pdfGenerator';
 import PieChart from '../PieChart.js';
+import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 // export default function Home() {
 //   const router = useRouter();
@@ -38,6 +40,12 @@ import PieChart from '../PieChart.js';
 // }
 
 export default function Home() {
+
+  const { data: session } = useSession();
+  // if (session === null) {
+  //   redirect("/login");
+  // }
+
   const [link, setLink] = useState('');
   const [repoInfo, setRepoInfo] = useState(null);
   const [error, setError] = useState('');
@@ -55,12 +63,14 @@ export default function Home() {
       console.error('Invalid GitHub repository link'); 
       return;
     }
-
-    const repoPath = match[1]; 
-    console.log(`Extracted repo path: ${repoPath}`); 
+    const repoPath = match[1]; // Extracting the repository path from the match
+    console.log(`Extracted repo path: ${repoPath}`); // Log the extracted repo path
 
     try {
+      console.log(repoPath)
       const response = await axios.post('/api/fetchRepo', { link: repoPath });
+      console.log(response)
+      console.log(response.data);
       setRepoInfo(response.data);
       
     } catch (err) {
