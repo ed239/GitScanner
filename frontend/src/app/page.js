@@ -8,6 +8,7 @@ import axios from 'axios';
 import generatePDF from '../pdfGenerator';
 import PieChart from '../PieChart.js';
 import LineChartCommits from '../LineChartCommits.js';
+import LineChartPulls from '@/LineChartPulls';
 
 // export default function Home() {
 //   const router = useRouter();
@@ -229,9 +230,9 @@ export default function Home() {
 
 
 
-            <div className={styles.infoBox}>
-              <h2>Repository Info2</h2>
-              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            <div className={styles.infoBoxLarge}>
+              <h2 className={styles.infoTitle}>Pulls Over Time</h2>
+              <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors()} />
             </div>
 
             <div className={styles.infoBox}>
