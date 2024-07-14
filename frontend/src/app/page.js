@@ -95,31 +95,9 @@ export default function Home() {
     return repoInfo.contributors.map(contributor => contributor.login);
   };
 
-  const processCommits = (commits) => {
-    const commitData = {};
-    commits.forEach(commit => {
-      const date = new Date(commit.date).toLocaleDateString();
-      const author = commit.author;
-      if (!commitData[author]) {
-        commitData[author] = {};
-      }
-      if (!commitData[author][date]) {
-        commitData[author][date] = 0;
-      }
-      commitData[author][date]++;
-    });
-
-    const dates = Array.from(new Set(commits.map(commit => new Date(commit.date).toLocaleDateString()))).sort();
-    const datasets = Object.keys(commitData).map(author => ({
-      label: author,
-      data: dates.map(date => commitData[author][date] || 0),
-      fill: false,
-      borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), // random color
-      tension: 0.1
-    }));
-
-    return { labels: dates, datasets };
-  };
+  const colors = [
+    '#FF5733', '#33FF57', '#3357FF', '#F333FF', '#33FFF3', '#FF33A6', '#A633FF', '#FFAF33'
+  ];
 
   return (
     <div className={styles.container}>
@@ -236,8 +214,19 @@ export default function Home() {
             </div>
 
             <div className={styles.infoBox}>
-              <h2>Repository Info2</h2>
-              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            <h2 className={styles.infoTitle}>Languages & Tools</h2>
+            <br></br>
+              <div className={styles.languagesContainer}>
+                {Object.keys(repoInfo.languages).map((language, index) => (
+                  <div
+                    key={language}
+                    className={styles.languageBox}
+                    style={{ backgroundColor: colors[index % colors.length] }}
+                  >
+                    {language}
+                  </div>
+                ))}
+              </div>
             </div>
             
         </div>
