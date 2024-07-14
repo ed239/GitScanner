@@ -8,6 +8,7 @@ import axios from 'axios';
 import generatePDF from '../pdfGenerator';
 import PieChart from '../PieChart.js';
 import LineChartCommits from '../LineChartCommits.js';
+import LineChartPulls from '@/LineChartPulls';
 
 // export default function Home() {
 //   const router = useRouter();
@@ -178,19 +179,17 @@ export default function Home() {
 
             <div className={styles.infoBox}>
               <h2 className={styles.infoTitle}>Contributor Pull Requests</h2>
-              {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
-                <ul>
-                  {repoInfo.contributors.map((contributor) => (
-                    <li key={contributor.id}>
-                      <p>{contributor.login}: {repoInfo.pullRequestsByContributor[contributor.login] || 0}</p>
-                      
-                    
-                    </li>
-                    
-                  ))}
-                </ul>
-                
-              ) : (
+              {repoInfo.pullRequestsByContributor && Object.keys(repoInfo.pullRequestsByContributor).length > 0 ? (
+              <ul>
+                {Object.keys(repoInfo.pullRequestsByContributor).map((username, index) => (
+                  <li key={username}>
+                    <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
+                      {username}: {Object.values(repoInfo.pullRequestsByContributor)[index]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
                 <p>No contributors found.</p>
               )}
               
@@ -231,9 +230,9 @@ export default function Home() {
 
 
 
-            <div className={styles.infoBox}>
-              <h2>Repository Info2</h2>
-              <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
+            <div className={styles.infoBoxLarge}>
+              <h2 className={styles.infoTitle}>Pulls Over Time</h2>
+              <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors()} />
             </div>
 
             <div className={styles.infoBox}>
