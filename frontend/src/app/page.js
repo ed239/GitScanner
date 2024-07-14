@@ -80,6 +80,11 @@ export default function Home() {
   };
   
   useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const codeParam = urlParams.get("code");
+    console.log(codeParam);
+
     if (repoInfo) {
       console.log('Updated repoInfo:', repoInfo);
       console.log('Commits:', repoInfo.commits);
