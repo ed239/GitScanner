@@ -159,6 +159,28 @@
 
   }
 
+  .languagesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    
+    
+  }
+  
+  .languageBox {
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+  }
+
 
 
 

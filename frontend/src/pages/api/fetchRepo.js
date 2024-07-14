@@ -63,6 +63,9 @@ export default async function handler(req, res) {
       const contributorsResponse = await axios.get(`https://api.github.com/repos/${link}/contributors`);
       const contributorsData = contributorsResponse.data;
 
+      const languages = await axios.get(`https://api.github.com/repos/${link}/languages`);
+      const languageData = languages.data;
+
       // Fetch pull requests
       const pullsUrl = `https://api.github.com/repos/${link}/pulls?state=all&per_page=100`;
       const pullsResponse = await axios.get(pullsUrl);
@@ -91,6 +94,7 @@ export default async function handler(req, res) {
         pulls: pullsData,
         commits: commitsData,
         pullRequestsByContributor,
+        languages: languageData,
       });
      
     } catch (error) {
