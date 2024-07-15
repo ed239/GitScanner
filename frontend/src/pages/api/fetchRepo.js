@@ -43,16 +43,7 @@ import axios from 'axios';
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { link } = req.body;
-    // const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-
-    // if (!GITHUB_TOKEN) {
-    //   return res.status(500).json({ error: 'GitHub token not found in environment variables' });
-    // }
-
-    // const headers = {
-    //   Authorization: `token ${GITHUB_TOKEN}`,
-    //   Accept: 'application/vnd.github.v3+json',
-    // };
+    console.log(link)
 
     try {
 
@@ -105,3 +96,8 @@ export default async function handler(req, res) {
     res.status(405).json({ error: 'Method not allowed' });
   }
 }
+
+
+
+
+
