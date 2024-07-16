@@ -12,6 +12,13 @@
     overflow-y: scroll;
     
   }
+.column {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
   
   .title {
     font-size: 6rem;
@@ -30,11 +37,12 @@
   }
 
   .inputRow {
-    width: 100%;
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
+    margin-bottom:0.2rem;
   }
   .inputContainer {
     width: 100%;
@@ -42,6 +50,7 @@
     justify-content: center;
     margin-bottom: 10px;
   }
+
   
   .buttonPlaceholder {
     width:15rem; /* Width of the buttons container */
@@ -71,6 +80,7 @@
     display: flex;
     align-items: center;
     
+    
   }
   
   .roundedInput {
@@ -79,7 +89,22 @@
     border-radius: 25px;
     font-size: 1rem;
     margin-right: 10px;
-    width: 60rem;
+    width: 70%;
+    margin-left:10%;
+    background-color: #ebebeb;
+    color:black;
+    
+  }
+
+  .roundedInput2 {
+    padding: 10px;
+    
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    font-size: 1rem;
+    margin-right: 10px;
+    width: 70%;
+    margin-left:10%;
     background-color: #ebebeb;
     color:black;
   }
@@ -90,6 +115,16 @@
     border-radius: 25px;
     background-color: #070708;
     color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0.5rem;
+  }
+  .notSeen {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background-color: #a8e992;
+    color: #a8e992;
     font-size: 1rem;
     cursor: pointer;
     margin: 0.5rem;
