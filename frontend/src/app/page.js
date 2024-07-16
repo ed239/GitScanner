@@ -118,24 +118,34 @@ export default function Home() {
         </div>
         {links.slice(1).map((link, index) => (
           <div key={index + 1} className={styles.inputContainer}>
+          <div className={styles.inputRow}>
             <input
               type="text"
-              className={styles.roundedInput}
+              className={styles.roundedInput2}
               placeholder="Enter GitHub repo link"
               value={link}
               onChange={(e) => handleLinkChange(index + 1, e.target.value)}
             />
-            <div className={styles.buttonPlaceholder}></div>
+            {/* <div className={styles.buttonPlaceholder}></div> */}
+
+            <div className={styles.buttonContainer}>
+            <button type="submit" className={styles.notSeen}>Submit</button>
+            <button type="button" onClick={handleAddLink} className={styles.notSeen}>Add Link</button>
+          </div>
+            </div>
           </div>
         ))}
       </form>
-
+      {Object.keys(repoInfoList).length > 0 && (
+        <button onClick={handleGeneratePDF} className={styles.submitButton}>Download PDF</button>
+      )}
       {error && <p className={styles.error}>{error}</p>}
 
       {repoInfoList.map((repoInfo, index) => (
         <div key={index} className={styles.infoContainer}>
+        
           <h2 className={styles.projTitle}>{repoInfo.repoData.name}</h2>
-          <button onClick={handleGeneratePDF} className={styles.submitButton}>Download PDF</button>
+          {/* <button onClick={handleGeneratePDF} className={styles.submitButton}>Download PDF</button> */}
           <div className={styles.infoBox}>
             <h2 className={styles.infoTitle}>Repository Information</h2>
             <p><strong>Name:</strong> {repoInfo.repoData.name}</p>
@@ -145,6 +155,10 @@ export default function Home() {
             <p><strong>Language:</strong> {repoInfo.repoData.language}</p>
             <p><strong>Size:</strong> {repoInfo.repoData.size}</p>
             <p><strong>Number of Pull Requests:</strong> {repoInfo.pulls.length}</p>
+          </div>
+
+          <div className={styles.infoBox}>
+            <h2 className={styles.infoTitle}>Contributor Information</h2>
           </div>
 
           <div className={styles.infoBox}>
@@ -164,6 +178,25 @@ export default function Home() {
             )}
             <PieChart contributors={repoInfo.contributors} type="commits" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
           </div>
+
+          <div className={styles.infoBox}>
+              <h2 className={styles.infoTitle}>Contributor Pull Requests</h2>
+              {repoInfo.pullRequestsByContributor && Object.keys(repoInfo.pullRequestsByContributor).length > 0 ? (
+              <ul>
+                {Object.keys(repoInfo.pullRequestsByContributor).map((username, index) => (
+                  <li key={username}>
+                    <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
+                      {username}: {Object.values(repoInfo.pullRequestsByContributor)[index]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+                <p>No contributors found.</p>
+              )}
+              
+              <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
+            </div>
 
           <div className={styles.infoBoxLarge}>
             <h2 className={styles.infoTitle}>Commits Over Time</h2>

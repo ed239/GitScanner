@@ -3,11 +3,11 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 const LineChartPulls = ({ pulls, allContributors }) => {
-  console.log(pulls)
+
   const processPulls = (pulls) => {
     const pullData = {};
     pulls.forEach(pull => {
-      console.log(pull)
+    
       const date = new Date(pull.created_at).toLocaleDateString();
       const author = pull.user.login;
      
@@ -24,7 +24,7 @@ const LineChartPulls = ({ pulls, allContributors }) => {
 const authors = Object.keys(pullData);
 const dates = Array.from(new Set(authors.flatMap(author => Object.keys(pullData[author])))).sort();
 
-console.log(pullData)
+
 const datasets = authors.map(author => ({
   label: author,
   data: dates.map(date => pullData[author][date] || 0),
