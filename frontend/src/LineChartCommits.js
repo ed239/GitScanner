@@ -40,7 +40,7 @@ const dates = Array.from(new Set(authors.flatMap(author => Object.keys(commitDat
 //   });
 // });
 
-console.log(commitData)
+
 const datasets = authors.map(author => ({
   label: author,
   data: dates.map(date => commitData[author][date] || 0),

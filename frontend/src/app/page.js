@@ -157,11 +157,26 @@ export default function Home() {
             <p><strong>Number of Pull Requests:</strong> {repoInfo.pulls.length}</p>
           </div>
 
-          <div className={styles.infoBox}>
+          {/* <div className={styles.infoBox}>
             <h2 className={styles.infoTitle}>Contributor Information</h2>
+          </div> */}
+          <div className={styles.infoBox}>
+            <h2 className={styles.infoTitle}>Languages & Tools</h2>
+            <br />
+            <div className={styles.languagesContainer}>
+              {Object.keys(repoInfo.languages).map((language, index) => (
+                <div
+                  key={language}
+                  className={styles.languageBox}
+                  style={{ backgroundColor: colors[index % colors.length] }}
+                >
+                  {language}
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className={styles.infoBox}>
+          <div className={styles.infoBoxPie}>
             <h2 className={styles.infoTitle}>Contributor Commits</h2>
             {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
               <ul>
@@ -179,7 +194,7 @@ export default function Home() {
             <PieChart contributors={repoInfo.contributors} type="commits" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
           </div>
 
-          <div className={styles.infoBox}>
+          <div className={styles.infoBoxPie}>
               <h2 className={styles.infoTitle}>Contributor Pull Requests</h2>
               {repoInfo.pullRequestsByContributor && Object.keys(repoInfo.pullRequestsByContributor).length > 0 ? (
               <ul>
@@ -208,21 +223,7 @@ export default function Home() {
             <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors(repoInfo)} />
           </div>
 
-          <div className={styles.infoBox}>
-            <h2 className={styles.infoTitle}>Languages & Tools</h2>
-            <br />
-            <div className={styles.languagesContainer}>
-              {Object.keys(repoInfo.languages).map((language, index) => (
-                <div
-                  key={language}
-                  className={styles.languageBox}
-                  style={{ backgroundColor: colors[index % colors.length] }}
-                >
-                  {language}
-                </div>
-              ))}
-            </div>
-          </div>
+          
         </div>
       ))}
     </div>
