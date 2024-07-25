@@ -1,9 +1,13 @@
 // import React from 'react';
+
+import { useEffect, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import html2canvas from 'html2canvas';
 Chart.register(...registerables);
 
-const LineChartCommits = ({ commits, allContributors }) => {
+const LineChartCommits = ({ commits, allContributors, setChartImageCommitsLine }) => {
+  const chartRef = useRef(null);
   const processCommits = (commits) => {
     const commitData = {};
     commits.forEach(commit => {
@@ -54,9 +58,17 @@ return { labels: dates, datasets };
 
 const chartData = processCommits(commits, allContributors);
 
+useEffect(() => {
+  if (chartRef.current) {
+    html2canvas(chartRef.current.canvas).then((canvas) => {
+      setChartImageCommitsLine(canvas.toDataURL('image/png'));
+    });
+  }
+}, [chartData, setChartImageCommitsLine]);
+
 return (
 
-    <Line data={chartData} />
+    <Line ref ={chartRef} data={chartData} />
   
 );
 };
