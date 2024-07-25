@@ -114,6 +114,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
         </div>
         <div class="${styles.infoBoxPie}">
           <h2 class="${styles.infoTitle}">Contributor Commits</h2>
+       
           ${repoInfo.contributors && repoInfo.contributors.length > 0 ? `
             <ul>
               ${repoInfo.contributors.map(contributor => `
@@ -125,6 +126,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
               `).join('')}
             </ul>
           ` : `<p>No contributors found.</p>`}
+          <div id="pie-commits-placeholder"></div>
         </div>
         <div class="${styles.infoBoxPie}">
           <h2 class="${styles.infoTitle}">Contributor Pull Requests</h2>
@@ -139,13 +141,15 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
               `).join('')}
             </ul>
           ` : `<p>No contributors found.</p>`}
+          <div id="pie-pulls-placeholder"></div>
         </div>
         <div class="${styles.infoBoxLarge}">
           <h2 class="${styles.infoTitle}">Commits Over Time</h2>
+          <div id="chart-commits-placeholder"></div>
         </div>
         <div class="${styles.infoBoxLarge}">
           <h2 class="${styles.infoTitle}">Pulls Over Time</h2>
-          <div id="chart-placeholder"></div>
+          <div id="chart-pulls-placeholder"></div>
           
         </div>
       </div>
@@ -154,6 +158,39 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
 
     document.body.appendChild(container);
 
+
+
+    if (chartImageCommitsPie) {
+      const chartPieCommitsPlaceholder = container.querySelector('#pie-commits-placeholder');
+      const chartPieCommitssImg = document.createElement('img');
+      chartPieCommitssImg.src = chartImageCommitsPie;
+      chartPieCommitssImg.style.width = '100%';
+      chartPieCommitsPlaceholder.appendChild(chartPieCommitssImg);
+    }
+
+    if (chartImagePullsPie) {
+      const chartPiePullsPlaceholder = container.querySelector('#pie-pulls-placeholder');
+      const chartPiePullsImg = document.createElement('img');
+      chartPiePullsImg.src = chartImagePullsPie;
+      chartPiePullsImg.style.width = '100%';
+      chartPiePullsPlaceholder.appendChild(chartPiePullsImg);
+    }
+
+    if (chartImageCommitsLine) {
+      const chartCommitsPlaceholder = container.querySelector('#chart-commits-placeholder');
+      const chartCommitsImg = document.createElement('img');
+      chartCommitsImg.src = chartImageCommitsLine;
+      chartCommitsImg.style.width = '100%';
+      chartCommitsPlaceholder.appendChild(chartCommitsImg);
+    }
+
+    if (chartImagePullsLine) {
+      const chartPullsPlaceholder = container.querySelector('#chart-pulls-placeholder');
+      const chartPullsImg = document.createElement('img');
+      chartPullsImg.src = chartImagePullsLine;
+      chartPullsImg.style.width = '100%';
+      chartPullsPlaceholder.appendChild(chartPullsImg);
+    }
 
     const canvas = await html2canvas(container, { scale: 2 });
     const imgData = canvas.toDataURL('image/png');
@@ -167,17 +204,8 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
 
     doc.addImage(imgData, 'PNG', 10, position, 190, imgHeight);
     position += imgHeight;
-    if(chartImageCommitsPie && chartImagePullsPie){
-      doc.addPage();
-      doc.addImage(chartImageCommitsPie, 'PNG', 10, 10, 70, 70);
-      doc.addPage();
-      doc.addImage(chartImagePullsPie, 'PNG', 10, 10, 70, 70);
-    }
 
-    if(chartImageCommitsLine){
-      doc.addPage();
-      doc.addImage(chartImageCommitsLine, 'PNG', 10, 10, 190, 100);
-    }
+
 
     if (chartImagePullsLine) {
       doc.addPage();
