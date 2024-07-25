@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import html2canvas from 'html2canvas';
+import { useEffect, useRef, useState } from 'react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -25,7 +27,8 @@ const generateColorMap = (contributors) => {
   return colorMap;
 };
 
-const PieChart = ({ contributors, type, pullRequestsByContributor }) => {
+const PieChart = ({ contributors, type, pullRequestsByContributor, setChartImageCommitsPie, setChartImagePullsPie }) => {
+  const chartRef = useRef(null);
   // const colors = generateColors(contributors.length);
   const colorMap = generateColorMap(contributors);
   
@@ -40,10 +43,6 @@ const PieChart = ({ contributors, type, pullRequestsByContributor }) => {
       },
     ],
   };
-
- 
-
-
 
   const dataPR = {
     labels: Object.keys(pullRequestsByContributor),
@@ -67,10 +66,26 @@ const PieChart = ({ contributors, type, pullRequestsByContributor }) => {
     },
   };
 if(type=="commits"){
-  return <Pie data={data} options={options} />;
+  
+  useEffect(() => {
+    if (chartRef.current) {
+      html2canvas(chartRef.current.canvas).then((canvas) => {
+        setChartImageCommitsPie(canvas.toDataURL('image/png'));
+      });
+    }
+  }, [data, setChartImageCommitsPie]);
+
+  return <Pie ref={chartRef} data={data} options={options} />;
 }
 else{
-  return <Pie data={dataPR} options={options} />;
+  useEffect(() => {
+    if (chartRef.current) {
+      html2canvas(chartRef.current.canvas).then((canvas) => {
+        setChartImagePullsPie(canvas.toDataURL('image/png'));
+      });
+    }
+  }, [dataPR, setChartImagePullsPie]);
+  return <Pie ref={chartRef} data={dataPR} options={options} />;
 
 }
 };

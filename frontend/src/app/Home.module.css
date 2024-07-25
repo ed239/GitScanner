@@ -12,6 +12,21 @@
     overflow-y: scroll;
     
   }
+
+  .containerPDF {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* height: 100vh; */
+    
+    background-color: white;
+    color:black;
+    overflow-y: scroll;
+    
+  }
+
+  
 .column {
 
     display: flex;

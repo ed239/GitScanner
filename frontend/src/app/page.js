@@ -12,10 +12,15 @@ import LineChartPulls from '@/LineChartPulls';
 
 
 
+
 export default function Home() {
   const [links, setLinks] = useState(['']); // State to store input links
   const [repoInfoList, setRepoInfoList] = useState([]); // State to store fetched repository info
   const [error, setError] = useState(''); // State to handle errors
+  const [chartImagePullsLine, setChartImagePullsLine] = useState(null);
+  const [chartImageCommitsLine, setChartImageCommitsLine] = useState(null);
+  const [chartImageCommitsPie, setChartImageCommitsPie] = useState(null);
+  const [chartImagePullsPie, setChartImagePullsPie] = useState(null);
 
   const router = useRouter();
 
@@ -89,7 +94,12 @@ export default function Home() {
 
 
   const handleGeneratePDF = () => {
-  
+    if (repoInfoList && repoInfoList.length > 0) {
+      generatePDF(repoInfoList,chartImageCommitsPie, chartImagePullsPie,chartImageCommitsLine,chartImagePullsLine);
+   
+    } else {
+      console.error('No repository info available to generate PDF.');
+    }
   };
   //   const handleGeneratePDF = () => {
 //     if (repoInfo) {
@@ -191,7 +201,7 @@ export default function Home() {
             ) : (
               <p>No contributors found.</p>
             )}
-            <PieChart contributors={repoInfo.contributors} type="commits" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
+            <PieChart contributors={repoInfo.contributors} type="commits" pullRequestsByContributor={repoInfo.pullRequestsByContributor} setChartImageCommitsPie={setChartImageCommitsPie} />
           </div>
 
           <div className={styles.infoBoxPie}>
@@ -210,17 +220,18 @@ export default function Home() {
                 <p>No contributors found.</p>
               )}
               
-              <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} />
+              <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} setChartImagePullsPie={setChartImagePullsPie} />
             </div>
 
           <div className={styles.infoBoxLarge}>
             <h2 className={styles.infoTitle}>Commits Over Time</h2>
-            <LineChartCommits commits={repoInfo.commits} allContributors={getAllContributors(repoInfo)} />
+            <LineChartCommits commits={repoInfo.commits} allContributors={getAllContributors(repoInfo)} setChartImageCommitsLine={setChartImageCommitsLine} />
           </div>
 
           <div className={styles.infoBoxLarge}>
             <h2 className={styles.infoTitle}>Pulls Over Time</h2>
-            <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors(repoInfo)} />
+            {/* <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors(repoInfo)} /> */}
+            <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors(repoInfo)}  setChartImagePullsLine={setChartImagePullsLine}/>
           </div>
 
           
