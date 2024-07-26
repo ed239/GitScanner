@@ -9,6 +9,7 @@ import generatePDF from '../pdfGenerator';
 import PieChart from '../PieChart.js';
 import LineChartCommits from '../LineChartCommits.js';
 import LineChartPulls from '@/LineChartPulls';
+import LoadingPopup from './LoadingPopup';
 
 
 
@@ -17,10 +18,11 @@ export default function Home() {
   const [links, setLinks] = useState(['']); // State to store input links
   const [repoInfoList, setRepoInfoList] = useState([]); // State to store fetched repository info
   const [error, setError] = useState(''); // State to handle errors
-  const [chartImagePullsLine, setChartImagePullsLine] = useState(null);
-  const [chartImageCommitsLine, setChartImageCommitsLine] = useState(null);
-  const [chartImageCommitsPie, setChartImageCommitsPie] = useState(null);
-  const [chartImagePullsPie, setChartImagePullsPie] = useState(null);
+  const [chartImagePullsLine, setChartImagePullsLine] = useState([]);
+  const [chartImageCommitsLine, setChartImageCommitsLine] = useState([]);
+  const [chartImageCommitsPie, setChartImageCommitsPie] = useState([]);
+  const [chartImagePullsPie, setChartImagePullsPie] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -93,28 +95,62 @@ export default function Home() {
   ];
 
 
-  // const handleGeneratePDF = () => {
-  //   if (repoInfoList && repoInfoList.length > 0) {
-  //     generatePDF(repoInfoList,chartImageCommitsPie, chartImagePullsPie,chartImageCommitsLine,chartImagePullsLine);
-   
-  //   } else {
-  //     console.error('No repository info available to generate PDF.');
-  //   }
-  // };
+  const updateChartImages = (repoIndex, chartType, imgSrc) => {
+    switch (chartType) {
+      case 'pullsLine':
+        setChartImagePullsLine(prev => {
+          const newCharts = [...prev];
+          newCharts[repoIndex] = imgSrc;
+          return newCharts;
+        });
+        break;
+      case 'commitsLine':
+        setChartImageCommitsLine(prev => {
+          const newCharts = [...prev];
+          newCharts[repoIndex] = imgSrc;
+          return newCharts;
+        });
+        break;
+      case 'commitsPie':
+        setChartImageCommitsPie(prev => {
+          const newCharts = [...prev];
+          newCharts[repoIndex] = imgSrc;
+          return newCharts;
+        });
+        break;
+      case 'pullsPie':
+        setChartImagePullsPie(prev => {
+          const newCharts = [...prev];
+          newCharts[repoIndex] = imgSrc;
+          return newCharts;
+        });
+        break;
+      default:
+        console.error(`Unknown chart type: ${chartType}`);
+    }
+  };
+
   const handleGeneratePDF = async () => {
     if (repoInfoList && repoInfoList.length > 0) {
-      // Ensure the containers are not hidden initially
-      document.querySelectorAll('.containerPDF').forEach(container => {
-        container.classList.remove('hidden');
-      });
-  
-      // Generate the PDF
-      await generatePDF(repoInfoList, chartImageCommitsPie, chartImagePullsPie, chartImageCommitsLine, chartImagePullsLine);
-  
-      // Hide the containers after generating the PDF
-      document.querySelectorAll('.containerPDF').forEach(container => {
-        container.classList.add('hidden');
-      });
+      setIsLoading(true);
+      try {
+        // Ensure the containers are not hidden initially
+        document.querySelectorAll('.containerPDF').forEach(container => {
+          container.classList.remove('hidden');
+        });
+
+        // Generate the PDF
+        await generatePDF(repoInfoList, chartImageCommitsPie, chartImagePullsPie, chartImageCommitsLine, chartImagePullsLine);
+
+        // Hide the containers after generating the PDF
+        document.querySelectorAll('.containerPDF').forEach(container => {
+          container.classList.add('hidden');
+        });
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+      } finally {
+        setIsLoading(false); // Hide the loading popup
+      }
     } else {
       console.error('No repository info available to generate PDF.');
     }
@@ -157,8 +193,10 @@ export default function Home() {
           </div>
         ))}
       </form>
+      <LoadingPopup isVisible={isLoading} />
       {Object.keys(repoInfoList).length > 0 && (
         <button onClick={handleGeneratePDF} className={styles.submitButton}>Download PDF</button>
+        
       )}
       {error && <p className={styles.error}>{error}</p>}
 
@@ -212,7 +250,7 @@ export default function Home() {
             ) : (
               <p>No contributors found.</p>
             )}
-            <PieChart contributors={repoInfo.contributors} type="commits" pullRequestsByContributor={repoInfo.pullRequestsByContributor} setChartImageCommitsPie={setChartImageCommitsPie} />
+            <PieChart contributors={repoInfo.contributors} type="commits" pullRequestsByContributor={repoInfo.pullRequestsByContributor} setChartImageCommitsPie={(imgSrc) => updateChartImages(index, 'commitsPie', imgSrc)}  />
           </div>
 
           <div className={styles.infoBoxPie}>
@@ -231,18 +269,18 @@ export default function Home() {
                 <p>No contributors found.</p>
               )}
               
-              <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} setChartImagePullsPie={setChartImagePullsPie} />
+              <PieChart contributors={repoInfo.contributors} type="pr" pullRequestsByContributor={repoInfo.pullRequestsByContributor} setChartImagePullsPie={(imgSrc) => updateChartImages(index, 'pullsPie', imgSrc)} />
             </div>
 
           <div className={styles.infoBoxLarge}>
             <h2 className={styles.infoTitle}>Commits Over Time</h2>
-            <LineChartCommits commits={repoInfo.commits} allContributors={getAllContributors(repoInfo)} setChartImageCommitsLine={setChartImageCommitsLine} />
+            <LineChartCommits commits={repoInfo.commits} allContributors={getAllContributors(repoInfo)} setChartImageCommitsLine={(imgSrc) => updateChartImages(index, 'commitsLine', imgSrc)}  />
           </div>
 
           <div className={styles.infoBoxLarge}>
             <h2 className={styles.infoTitle}>Pulls Over Time</h2>
             {/* <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors(repoInfo)} /> */}
-            <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors(repoInfo)}  setChartImagePullsLine={setChartImagePullsLine}/>
+            <LineChartPulls pulls={repoInfo.pulls} allContributors={getAllContributors(repoInfo)}  setChartImagePullsLine={(imgSrc) => updateChartImages(index, 'pullsLine', imgSrc)}/>
           </div>
 
           

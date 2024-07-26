@@ -157,26 +157,26 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
 
 
 
-    if (chartImageCommitsPie) {
+    if (chartImageCommitsPie[repoIndex]) {
       const chartPieCommitsPlaceholder = container.querySelector('#pie-commits-placeholder');
       const chartPieCommitssImg = document.createElement('img');
-      chartPieCommitssImg.src = chartImageCommitsPie;
+      chartPieCommitssImg.src = chartImageCommitsPie[repoIndex];
       chartPieCommitssImg.style.width = '100%';
       chartPieCommitsPlaceholder.appendChild(chartPieCommitssImg);
     }
 
-    if (chartImagePullsPie) {
+    if (chartImagePullsPie[repoIndex]) {
       const chartPiePullsPlaceholder = container.querySelector('#pie-pulls-placeholder');
       const chartPiePullsImg = document.createElement('img');
-      chartPiePullsImg.src = chartImagePullsPie;
+      chartPiePullsImg.src = chartImagePullsPie[repoIndex];
       chartPiePullsImg.style.width = '100%';
       chartPiePullsPlaceholder.appendChild(chartPiePullsImg);
     }
 
-    if (chartImageCommitsLine) {
+    if (chartImageCommitsLine[repoIndex]) {
       const chartCommitsPlaceholder = container.querySelector('#chart-commits-placeholder');
       const chartCommitsImg = document.createElement('img');
-      chartCommitsImg.src = chartImageCommitsLine;
+      chartCommitsImg.src = chartImageCommitsLine[repoIndex];
       chartCommitsImg.style.width = '100%';
       chartCommitsPlaceholder.appendChild(chartCommitsImg);
     }
@@ -219,10 +219,10 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
     // Append the second container to the body to ensure it is part of the DOM
     document.body.appendChild(container2);
 
-    if (chartImagePullsLine) {
+    if (chartImagePullsLine[repoIndex]) {
       const chartPullsPlaceholder = container2.querySelector('#chart-pulls-placeholder');
       const chartPullsImg = document.createElement('img');
-      chartPullsImg.src = chartImagePullsLine;
+      chartPullsImg.src = chartImagePullsLine[repoIndex];
       chartPullsImg.style.width = '100%';
       chartPullsPlaceholder.appendChild(chartPullsImg);
     }
@@ -237,15 +237,21 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
     const imgHeightPart2 = (canvasPart2.height * 190) / canvasPart2.width;
 
     // Add the captured part to the PDF, checking if it fits the current page
-    if (position + imgHeightPart2 > pageHeight) {
-      doc.addPage();
-      position = 10;
-    }
+    // if (position + imgHeightPart2 > pageHeight) {
+    //   doc.addPage();
+    //   position = 10;
+    // }
     doc.addImage(imgDataPart2, 'PNG', 10, position, 190, imgHeightPart2);
     position += imgHeightPart2;
 
-    if (repoIndex > 0) {
+    // if (repoIndex > 0) {
+    //   doc.addPage();
+    //   position = 10;
+    // }
+
+    if(repoIndex < repoInfoList.length-1){
       doc.addPage();
+      position = 10;
     }
 
     // doc.addImage(imgData, 'PNG', 10, position, 190, imgHeight);
