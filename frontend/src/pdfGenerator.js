@@ -86,6 +86,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
     // Create a container element to hold the HTML content for the repo
     const container = document.createElement('div');
     container.className = styles.containerPDF;
+    let position = 10;
 
     // Create HTML structure
     container.innerHTML = `
@@ -147,11 +148,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
           <h2 class="${styles.infoTitle}">Commits Over Time</h2>
           <div id="chart-commits-placeholder"></div>
         </div>
-        <div class="${styles.infoBoxLarge}">
-          <h2 class="${styles.infoTitle}">Pulls Over Time</h2>
-          <div id="chart-pulls-placeholder"></div>
-          
-        </div>
+       
       </div>
     `;
 
@@ -184,41 +181,85 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
       chartCommitsPlaceholder.appendChild(chartCommitsImg);
     }
 
+    
+
+    const canvasPart1 = await html2canvas(container, { scale: 2 });
+    const imgDataPart1 = canvasPart1.toDataURL('image/png');
+    const imgHeightPart1 = (canvasPart1.height * 190) / canvasPart1.width;
+
+    // Add the captured part to the PDF, checking if it fits the current page
+    if (position + imgHeightPart1 > pageHeight) {
+      doc.addPage();
+      position = 10;
+    }
+    doc.addImage(imgDataPart1, 'PNG', 10, position, 190, imgHeightPart1);
+    position += imgHeightPart1;
+
+    // Remove the first container from the DOM after capturing
+    document.body.removeChild(container);
+
+    // Add a new page for the second container
+    doc.addPage();
+    position = 10;
+
+    // Second Container
+    const container2 = document.createElement('div');
+    container2.className = styles.containerPDF;
+
+    // Create HTML structure for the second container
+    container2.innerHTML = `
+      <div class="${styles.infoContainer}">
+        <div class="${styles.infoBoxLarge}">
+          <h2 class="${styles.infoTitle}">Pulls Over Time</h2>
+          <div id="chart-pulls-placeholder"></div>
+        </div>
+      </div>
+    `;
+
+    // Append the second container to the body to ensure it is part of the DOM
+    document.body.appendChild(container2);
+
     if (chartImagePullsLine) {
-      const chartPullsPlaceholder = container.querySelector('#chart-pulls-placeholder');
+      const chartPullsPlaceholder = container2.querySelector('#chart-pulls-placeholder');
       const chartPullsImg = document.createElement('img');
       chartPullsImg.src = chartImagePullsLine;
       chartPullsImg.style.width = '100%';
       chartPullsPlaceholder.appendChild(chartPullsImg);
     }
 
-    const canvas = await html2canvas(container, { scale: 2 });
-    const imgData = canvas.toDataURL('image/png');
+    // const canvas = await html2canvas(container, { scale: 2 });
+    // const imgData = canvas.toDataURL('image/png');
 
-    const imgHeight = (canvas.height * 190) / canvas.width;
-    let position = 10;
+    // const imgHeight = (canvas.height * 190) / canvas.width;
+    // let position = 10;
+    const canvasPart2 = await html2canvas(container2, { scale: 2 });
+    const imgDataPart2 = canvasPart2.toDataURL('image/png');
+    const imgHeightPart2 = (canvasPart2.height * 190) / canvasPart2.width;
+
+    // Add the captured part to the PDF, checking if it fits the current page
+    if (position + imgHeightPart2 > pageHeight) {
+      doc.addPage();
+      position = 10;
+    }
+    doc.addImage(imgDataPart2, 'PNG', 10, position, 190, imgHeightPart2);
+    position += imgHeightPart2;
 
     if (repoIndex > 0) {
       doc.addPage();
     }
 
-    doc.addImage(imgData, 'PNG', 10, position, 190, imgHeight);
-    position += imgHeight;
+    // doc.addImage(imgData, 'PNG', 10, position, 190, imgHeight);
+    // position += imgHeight;
 
 
 
-    if (chartImagePullsLine) {
-      doc.addPage();
-      doc.addImage(chartImagePullsLine, 'PNG', 10, 10, 190, 100);
-    }
-    // if (chartImage) {
-    //   const chartPlaceholder = container.querySelector('#chart-placeholder');
-    //   const chartImg = document.createElement('img');
-    //   chartImg.src = chartImage;
-    //   chartPlaceholder.appendChild(chartImg);
+    // if (chartImagePullsLine) {
+    //   doc.addPage();
+    //   doc.addImage(chartImagePullsLine, 'PNG', 10, 10, 190, 100);
     // }
 
-    document.body.removeChild(container);
+
+    document.body.removeChild(container2);
   }
 
   doc.save('repo-info.pdf');

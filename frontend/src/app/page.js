@@ -93,21 +93,32 @@ export default function Home() {
   ];
 
 
-  const handleGeneratePDF = () => {
-    if (repoInfoList && repoInfoList.length > 0) {
-      generatePDF(repoInfoList,chartImageCommitsPie, chartImagePullsPie,chartImageCommitsLine,chartImagePullsLine);
+  // const handleGeneratePDF = () => {
+  //   if (repoInfoList && repoInfoList.length > 0) {
+  //     generatePDF(repoInfoList,chartImageCommitsPie, chartImagePullsPie,chartImageCommitsLine,chartImagePullsLine);
    
+  //   } else {
+  //     console.error('No repository info available to generate PDF.');
+  //   }
+  // };
+  const handleGeneratePDF = async () => {
+    if (repoInfoList && repoInfoList.length > 0) {
+      // Ensure the containers are not hidden initially
+      document.querySelectorAll('.containerPDF').forEach(container => {
+        container.classList.remove('hidden');
+      });
+  
+      // Generate the PDF
+      await generatePDF(repoInfoList, chartImageCommitsPie, chartImagePullsPie, chartImageCommitsLine, chartImagePullsLine);
+  
+      // Hide the containers after generating the PDF
+      document.querySelectorAll('.containerPDF').forEach(container => {
+        container.classList.add('hidden');
+      });
     } else {
       console.error('No repository info available to generate PDF.');
     }
   };
-  //   const handleGeneratePDF = () => {
-//     if (repoInfo) {
-//       generatePDF(repoInfo);
-//     } else {
-//       console.error('No repository info available to generate PDF.');
-//     }
-//   };
 
   return (
     <div className={styles.container}>
