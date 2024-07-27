@@ -6,6 +6,8 @@
     padding: 10px 20px;
     background-color: #050404;
     color: #fff;
+    
+   
   }
   
   .navList {
@@ -22,16 +24,17 @@
 
   
   .navLink {
-    color: #fff;
+    color: #ffffff;
     text-decoration: none;
   }
   
   .loginButton {
-    background-color: #fff;
+    background-color: #ffffff;
     color: #010000;
     padding: 5px 10px;
     border-radius: 3px;
     text-decoration: none;
+    border: none;
     font-size: 1rem;
   }
   

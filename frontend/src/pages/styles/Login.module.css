@@ -1,3 +1,13 @@
+.wholepage{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: #a8e992;
+
+}
 .page {
     display: flex;
     flex-direction: column;
