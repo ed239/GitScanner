@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './LoadingPopup.module.css'; // Import your CSS module
 
 const messages = [
-  "Creating PDF...",
+  "Creating report...",
   "Loading data...",
   "This may take up to a minute..."
 ];

@@ -60,6 +60,7 @@ export default function Home() {
   
     const data = {}
   console.log(processedLinks)
+  setIsLoading(true);
     try {
       for (const repoPath of processedLinks) {
 
@@ -74,13 +75,16 @@ export default function Home() {
       console.log(data);
       const repoInfoArray = Object.values(data);
       setRepoInfoList(repoInfoArray);
+      setIsLoading(false);
       
       return data;
   
     } catch (err) {
+      setIsLoading(false);
       console.error('Error fetching repository information:', err);
       setError('Error fetching repository information');
     }
+    
   };
 
     const getAllContributors = (repoInfo) => {
