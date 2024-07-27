@@ -13,7 +13,7 @@
     display: flex;
     margin: 0;
     padding: 0;
-    margin-left:90%;
+    margin-left:auto;
   }
   
   .navItem {
@@ -39,3 +39,15 @@
     background-color: #78e385;
   }
   
+  .termProjectButton {
+    background-color: #fff;
+    color: #010000;
+    padding: 5px 15px;
+    border-radius: 3px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .termProjectButton:hover {
+    background-color: #78e385;
+  }
