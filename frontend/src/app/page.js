@@ -67,7 +67,7 @@ export default function Home() {
        console.log(repoPath)
         
         const response = await axios.post('/api/fetchRepo', { link: repoPath.toString() });
-        // console.log(response.data);
+        console.log(response.data);
         data[repoPath] = response.data;
       }
   
