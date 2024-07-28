@@ -11,8 +11,19 @@ const LineChartCommits = ({ commits, allContributors, setChartImageCommitsLine }
   const processCommits = (commits) => {
     const commitData = {};
     commits.forEach(commit => {
+      console.log("In Line Chart Commit")
+      console.log(commit)
+      console.log(commit.commit.author.name)
       const date = new Date(commit.commit.author.date).toLocaleDateString();
+      if(commit.author == null){
+        return
+      }
       const author = commit.author.login;
+      
+      
+      // const author = commit.author.login ? commit.author.login : commit.commit.author.name;
+      
+        
      
       if (!commitData[author]) {
         commitData[author] = {};
