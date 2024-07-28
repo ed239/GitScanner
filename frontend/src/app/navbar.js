@@ -11,8 +11,13 @@ const Navbar = () => {
     router.push('/login');
   };
 
+  // const navigateToTermProjects = () => {
+  //   router.push('/termProjects');
+  // };
+
+  //for now
   const navigateToTermProjects = () => {
-    router.push('/termProjects');
+    router.push('/');
   };
 
   return (
