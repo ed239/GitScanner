@@ -42,6 +42,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
+
     const { link } = req.body;
     // const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
@@ -54,9 +55,15 @@ export default async function handler(req, res) {
     //   Accept: 'application/vnd.github.v3+json',
     // };
 
+
     try {
 
-      const repoResponse = await axios.get(`https://api.github.com/repos/${link}`);
+      const repoResponse = await axios.get(`https://api.github.com/repos/${link}`, {
+        headers: {
+          Authorization: `${token}`,
+        }
+      });
+
       const repoData = repoResponse.data;
 
 
