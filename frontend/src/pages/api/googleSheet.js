@@ -1,10 +1,13 @@
 import { google } from "googleapis";
-import keys from "../../../google-sheets-key";
 
 export default async function handler(req, res) {
+
     try {
         const client = new google.auth.JWT(
-            keys.client_email, null, keys.private_key, ['https://www.googleapis.com/auth/spreadsheets']
+            process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL, 
+            null, 
+            process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"), 
+            ['https://www.googleapis.com/auth/spreadsheets']
         );
 
         client.authorize(async function(err, tokens) {
@@ -15,7 +18,7 @@ export default async function handler(req, res) {
             const gsapi = google.sheets({ version: 'v4', auth: client });
 
             const opt = {
-                spreadsheetId: '1QzlGUleiC1LaSEJJnlij5GbS3PcG9hif37J6gF6mGZk', // ID of google sheets
+                spreadsheetId: process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID,
                 range: 'Sheet1' // pull data from entire sheet
             };
 
@@ -31,3 +34,4 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: true, message: 'Unexpected error occurred' });
     }
 }
+

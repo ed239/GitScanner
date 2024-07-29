@@ -1,6 +1,3 @@
-'use client';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import styles from './styles/Projects.module.css';
 
 export default function TermProjects({ sheetdata }) {
