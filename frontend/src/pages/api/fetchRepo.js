@@ -70,11 +70,15 @@ export default async function handler(req, res) {
       // Aggregate pull requests by contributor
       const pullRequestsByContributor = {};
       pullsData.forEach(pull => {
+        
         const author = pull.user.login;
-        if (!pullRequestsByContributor[author]) {
-          pullRequestsByContributor[author] = 0;
+        if(pull.merged_at != null){
+          if (!pullRequestsByContributor[author]) {
+            pullRequestsByContributor[author] = 0;
+          }
+          pullRequestsByContributor[author] += 1;
         }
-        pullRequestsByContributor[author] += 1;
+        
       });
 
      
