@@ -1,5 +1,6 @@
 // src/pages/page.js (or src/pages/index.js)
 'use client';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Home.module.css';
 import jsPDF from 'jspdf';
@@ -8,8 +9,10 @@ import axios from 'axios';
 import generatePDF from '../pdfGenerator';
 import PieChart from '../PieChart.js';
 import LineChartCommits from '../LineChartCommits.js';
-import LineChartPulls from '@/LineChartPulls';
-import LoadingPopup from './LoadingPopup';
+// import LineChartPulls from '@/LineChartPulls';
+// import LoadingPopup from './LoadingPopup';
+import LineChartPulls from '../LineChartPulls.js'; 
+import LoadingPopup from '../app/LoadingPopup.js';  
 
 
 
