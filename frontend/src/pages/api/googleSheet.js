@@ -4,9 +4,9 @@ export default async function handler(req, res) {
 
     try {
         const client = new google.auth.JWT(
-            process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL, 
+            process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL, 
             null, 
-            process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"), 
+            process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"), 
             ['https://www.googleapis.com/auth/spreadsheets']
         );
 
