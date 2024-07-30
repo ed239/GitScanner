@@ -43,28 +43,36 @@ import axios from 'axios';
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { link } = req.body;
-    console.log(link)
+    const authHeader = req.headers.authorization;
+    const token = authHeader ? authHeader.split(' ')[1] : null;
+  
 
     try {
+      const config = token ? {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      } : {};
+    
 
-      const repoResponse = await axios.get(`https://api.github.com/repos/${link}`);
+      const repoResponse = await axios.get(`https://api.github.com/repos/${link}`, config);
       const repoData = repoResponse.data;
 
 
-      const contributorsResponse = await axios.get(`https://api.github.com/repos/${link}/contributors`);
+      const contributorsResponse = await axios.get(`https://api.github.com/repos/${link}/contributors`, config);
       const contributorsData = contributorsResponse.data;
 
-      const languages = await axios.get(`https://api.github.com/repos/${link}/languages`);
+      const languages = await axios.get(`https://api.github.com/repos/${link}/languages`, config);
       const languageData = languages.data;
 
       // Fetch pull requests
       const pullsUrl = `https://api.github.com/repos/${link}/pulls?state=all&per_page=100`;
-      const pullsResponse = await axios.get(pullsUrl);
+      const pullsResponse = await axios.get(pullsUrl, config);
       const pullsData = pullsResponse.data;
 
       // Fetch commits
       const commitsUrl = `https://api.github.com/repos/${link}/commits?per_page=100`;
-      const commitsResponse = await axios.get(commitsUrl);
+      const commitsResponse = await axios.get(commitsUrl, config);
       const commitsData = commitsResponse.data;
 
       // Aggregate pull requests by contributor
@@ -93,8 +101,13 @@ export default async function handler(req, res) {
       });
      
     } catch (error) {
-      console.error('GitHub API error:', error);
-      res.status(500).json({ error: 'GitHub API error' });
+      console.error('GitHub API error:', error.response.statusText);
+      if (error.response && error.response.statusText === 'rate limit exceeded') {
+        res.status(429).json({ error: 'GitHub API rate limit exceeded' }); 
+      } else {
+        res.status(500).json({ error: 'GitHub API error' });
+      }
+      
     }
   } else {
     res.status(405).json({ error: 'Method not allowed' });

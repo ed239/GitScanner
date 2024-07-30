@@ -64,9 +64,14 @@ export default function Home() {
     try {
       for (const repoPath of processedLinks) {
 
-       console.log(repoPath)
+       const token = localStorage.getItem('token');
+       const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
         
-        const response = await axios.post('/api/fetchRepo', { link: repoPath.toString() });
+        // const response = await axios.post('/api/fetchRepo', { link: repoPath.toString() });
+        const response = await axios.post('/api/fetchRepo', 
+          { link: repoPath.toString() }, 
+          { headers }
+        );
         console.log(response.data);
         data[repoPath] = response.data;
       }
@@ -82,7 +87,13 @@ export default function Home() {
     } catch (err) {
       setIsLoading(false);
       console.error('Error fetching repository information:', err);
-      setError('Error fetching repository information');
+      
+
+      if (err.response && err.response.data.error === 'GitHub API rate limit exceeded') {
+        setError('GitHub API rate limit exceeded. Please login or try again later.');
+      } else {
+        setError('Error getting repository information');
+      }
     }
     
   };
