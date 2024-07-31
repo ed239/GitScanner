@@ -6,56 +6,46 @@ import { useEffect, useRef, useState } from 'react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// const generateColors = (numColors) => {
-//   const colors = [];
-//   for (let i = 0; i < numColors; i++) {
-//     const hue = (i * 360) / numColors;
-//     colors.push(`hsl(${hue}, 70%, 50%)`);
-//   }
-//   return colors;
-// };
 
-const generateColorMap = (contributors) => {
-  const colors = [];
-  const colorMap = {};
-  for (let i = 0; i < contributors.length; i++) {
-    const hue = (i * 360) / contributors.length;
-    const color = `hsl(${hue}, 70%, 50%)`;
-    colors.push(color);
-    colorMap[contributors[i].login] = color;
-  }
-  return colorMap;
-};
+
+const colors = [
+  '#33FF57', '#CA0505', '#3357FF', '#F333FF', '#33C7FF', '#FF33A6', '#A633FF', '#FFAF33',
+  '#FF5733', '#2E7E4D', '#9CFEF8', '#F3FF33', '#76A3A0', '#DDBFF9', '#33A6FF', '#100404',
+  '#A45802', '#82F1AD', '#F29ADC', '#33A633'
+];
 
 const PieChart = ({ contributors, type, pullRequestsByContributor, setChartImageCommitsPie, setChartImagePullsPie }) => {
   const chartRef = useRef(null);
   // const colors = generateColors(contributors.length);
-  const colorMap = generateColorMap(contributors);
-  
+
+  const sortedContributors = [...contributors].sort((a, b) => a.login.localeCompare(b.login, undefined, { sensitivity: 'base' }));
+  const sortedPRContributors = Object.keys(pullRequestsByContributor)
+    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
   const data = {
-    labels: contributors.map((contributor) => contributor.login),
+    labels: sortedContributors.map((contributor) => contributor.login),
     datasets: [
       {
         label: 'Contributions',
-        data: contributors.map((contributor) => contributor.contributions),
-        backgroundColor: contributors.map((contributor) => colorMap[contributor.login]),
-        hoverBackgroundColor: contributors.map((contributor) => colorMap[contributor.login]),
+        data: sortedContributors.map((contributor) => contributor.contributions),
+        backgroundColor: sortedContributors.map((_, index) => colors[index % colors.length]),
+        hoverBackgroundColor: sortedContributors.map((_, index) => colors[index % colors.length]),
       },
     ],
   };
+  console.log(sortedPRContributors)
+  console.log(sortedContributors)
 
   const dataPR = {
-    labels: Object.keys(pullRequestsByContributor),
+    labels: sortedPRContributors,
     datasets: [
       {
         label: 'Pull Requests',
-        data: Object.values(pullRequestsByContributor),
-        backgroundColor: Object.keys(pullRequestsByContributor).map((login) => colorMap[login]),
-        hoverBackgroundColor: Object.keys(pullRequestsByContributor).map((login) => colorMap[login]),
+        data: sortedPRContributors.map((login) => pullRequestsByContributor[login]),
+        backgroundColor: sortedPRContributors.map((_, index) => colors[index % colors.length]),
+        hoverBackgroundColor: sortedPRContributors.map((_, index) => colors[index % colors.length]),
       },
     ],
   };
-
 
   const options = {
     responsive: true,
