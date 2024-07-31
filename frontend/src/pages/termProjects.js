@@ -40,13 +40,18 @@ export default function TermProjects({ sheetdata }) {
 }
 
 // fetch data from the server-side before rendering the page
-export async function getServerSideProps() {
+export async function getStaticProps() {
+    const requestId = Math.random().toString(36).substring(7); // Generate a unique ID for each request
+    console.log(`[${requestId}] Fetching data from Google Sheets`);
+
+    //try {
     const req = await fetch('http://localhost:3000/api/googleSheet');
     const res = await req.json();
 
+    console.log(`[${requestId}] Data fetched: staticProps`);
     return {
         props: {
             sheetdata: res.data || []
         }
-    }
+    }       
 }
