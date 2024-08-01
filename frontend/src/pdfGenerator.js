@@ -90,7 +90,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
 
     // Create HTML structure
     container.innerHTML = `
-      <div class="${styles.infoContainer}">
+      <div class="${styles.infoContainerPDF}">
         <h2 class="${styles.projTitle}">${repoInfo.repoData.name}</h2>
         <div class="${styles.infoBoxPDF}">
           <h2 class="${styles.infoTitle}">Repository Information</h2>

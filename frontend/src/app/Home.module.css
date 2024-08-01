@@ -175,6 +175,19 @@
     justify-content: center;
     overflow-y: auto;
   }
+
+  .infoContainerPDF {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    column-gap: 4rem;
+    row-gap: 3rem;
+    width: 100%; 
+    padding: 1rem;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+  }
   
   .infoBox {
     background-color: white;
@@ -235,7 +248,7 @@
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
-    width: 30%; 
+    width: 40%; 
     height:30rem;
     min-height: 15rem;
     padding-left: 1rem;
@@ -249,13 +262,15 @@
     z-index: 1;
     border-color: #070708;
     border-width: 0.2rem;
+    
+    
   }
 
   .infoBoxPiePDF {
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
-    width: 30%; 
+    width: 40%; 
     height:40rem;
     min-height: 15rem;
     padding-left: 1rem;
@@ -269,13 +284,15 @@
     z-index: 1;
     border-color: #070708;
     border-width: 0.2rem;
+    
+    
   }
 
   .infoBoxLargePDF {
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
-    width: 68%; 
+    width: 85%; 
     height:fit-content;
     min-height: 15rem;
     padding-left: 1rem;
@@ -289,7 +306,9 @@
     z-index: 1;
     border-color: #070708;
     border-width: 0.2rem;
+  
   }
+
   
   .infoTitle {
     font-size: 1.5em;
