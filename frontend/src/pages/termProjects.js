@@ -40,13 +40,34 @@ export default function TermProjects({ sheetdata }) {
 }
 
 // fetch data from the server-side before rendering the page
-export async function getServerSideProps() {
-    const req = await fetch('http://localhost:3000/api/googleSheet');
-    const res = await req.json();
+export async function getStaticProps() {
+    const requestId = Math.random().toString(36).substring(7); // Generate a unique ID for each request
+    console.log(`[${requestId}] Fetching data from Google Sheets`);
 
-    return {
-        props: {
-            sheetdata: res.data || []
+    const apiUrl = process.env.NODE_ENV === 'production'
+        ? 'https://gitscanner.onrender.com'
+        : 'http://localhost:3000';
+    const url = `${apiUrl}/api/googleSheet`;
+
+    try {
+        const req = await fetch(url);
+        if (!req.ok) {
+            throw new Error(`HTTP error! status: ${req.status}`);
         }
+        const res = await req.json();
+
+        console.log(`[${requestId}] Data fetched: staticProps`);
+        return {
+            props: {
+                sheetdata: res.data || []
+            }
+        };
+    } catch (error) {
+        console.error(`[${requestId}] Error fetching data:`, error);
+        return {
+            props: {
+                sheetdata: []
+            }
+        };
     }
 }
