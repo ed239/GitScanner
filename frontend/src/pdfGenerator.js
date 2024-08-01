@@ -92,7 +92,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
     container.innerHTML = `
       <div class="${styles.infoContainer}">
         <h2 class="${styles.projTitle}">${repoInfo.repoData.name}</h2>
-        <div class="${styles.infoBox}">
+        <div class="${styles.infoBoxPDF}">
           <h2 class="${styles.infoTitle}">Repository Information</h2>
           <p><strong>Name:</strong> ${repoInfo.repoData.name}</p>
           <p><strong>Description:</strong> ${repoInfo.repoData.description}</p>
@@ -102,7 +102,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
           <p><strong>Size:</strong> ${repoInfo.repoData.size}</p>
           <p><strong>Number of Pull Requests:</strong> ${repoInfo.pulls.length}</p>
         </div>
-        <div class="${styles.infoBox}">
+        <div class="${styles.infoBoxPDF}">
           <h2 class="${styles.infoTitle}">Languages & Tools</h2>
           <br />
           <div class="${styles.languagesContainer}">
@@ -113,7 +113,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
             `).join('')}
           </div>
         </div>
-        <div class="${styles.infoBoxPie}">
+        <div class="${styles.infoBoxPiePDF}">
           <h2 class="${styles.infoTitle}">Contributor Commits</h2>
        
           ${repoInfo.contributors && repoInfo.contributors.length > 0 ? `
@@ -129,7 +129,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
           ` : `<p>No contributors found.</p>`}
           <div id="pie-commits-placeholder"></div>
         </div>
-        <div class="${styles.infoBoxPie}">
+        <div class="${styles.infoBoxPiePDF}">
           <h2 class="${styles.infoTitle}">Contributor Pull Requests</h2>
           ${repoInfo.pullRequestsByContributor && Object.keys(repoInfo.pullRequestsByContributor).length > 0 ? `
             <ul>
@@ -144,7 +144,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
           ` : `<p>No contributors found.</p>`}
           <div id="pie-pulls-placeholder"></div>
         </div>
-        <div class="${styles.infoBoxLarge}">
+        <div class="${styles.infoBoxLargePDF}">
           <h2 class="${styles.infoTitle}">Commits Over Time</h2>
           <div id="chart-commits-placeholder"></div>
         </div>
@@ -209,7 +209,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
     // Create HTML structure for the second container
     container2.innerHTML = `
       <div class="${styles.infoContainer}">
-        <div class="${styles.infoBoxLarge}">
+        <div class="${styles.infoBoxLargePDF}">
           <h2 class="${styles.infoTitle}">Pulls Over Time</h2>
           <div id="chart-pulls-placeholder"></div>
         </div>
