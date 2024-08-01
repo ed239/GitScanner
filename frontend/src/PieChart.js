@@ -32,8 +32,7 @@ const PieChart = ({ contributors, type, pullRequestsByContributor, setChartImage
       },
     ],
   };
-  console.log(sortedPRContributors)
-  console.log(sortedContributors)
+
 
   const dataPR = {
     labels: sortedPRContributors,

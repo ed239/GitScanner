@@ -93,17 +93,17 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
       <div class="${styles.infoContainerPDF}">
         <h2 class="${styles.projTitle}">${repoInfo.repoData.name}</h2>
         <div class="${styles.infoBoxPDF}">
-          <h2 class="${styles.infoTitle}">Repository Information</h2>
+          <h2 class="${styles.infoTitlePDF}">Repository Information</h2>
           <p><strong>Name:</strong> ${repoInfo.repoData.name}</p>
           <p><strong>Description:</strong> ${repoInfo.repoData.description}</p>
           <p><strong>Created:</strong> ${repoInfo.repoData.created_at}</p>
           <p><strong>Updated:</strong> ${repoInfo.repoData.updated_at}</p>
-          <p><strong>Language:</strong> ${repoInfo.repoData.language}</p>
           <p><strong>Size:</strong> ${repoInfo.repoData.size}</p>
+          <p><strong>Number of Commits:</strong> ${repoInfo.commits.length}</p>
           <p><strong>Number of Pull Requests:</strong> ${repoInfo.pulls.length}</p>
         </div>
         <div class="${styles.infoBoxPDF}">
-          <h2 class="${styles.infoTitle}">Languages & Tools</h2>
+          <h2 class="${styles.infoTitlePDF}">Languages & Tools</h2>
           <br />
           <div class="${styles.languagesContainer}">
             ${Object.keys(repoInfo.languages).map((language, index) => `
@@ -114,7 +114,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
           </div>
         </div>
         <div class="${styles.infoBoxPiePDF}">
-          <h2 class="${styles.infoTitle}">Contributor Commits</h2>
+          <h2 class="${styles.infoTitlePDF}">Contributor Commits</h2>
        
           ${repoInfo.contributors && repoInfo.contributors.length > 0 ? `
             <ul>
@@ -130,7 +130,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
           <div id="pie-commits-placeholder"></div>
         </div>
         <div class="${styles.infoBoxPiePDF}">
-          <h2 class="${styles.infoTitle}">Contributor Pull Requests</h2>
+          <h2 class="${styles.infoTitlePDF}">Contributor Pull Requests</h2>
           ${repoInfo.pullRequestsByContributor && Object.keys(repoInfo.pullRequestsByContributor).length > 0 ? `
             <ul>
               ${Object.keys(repoInfo.pullRequestsByContributor).map(username => `
@@ -145,7 +145,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
           <div id="pie-pulls-placeholder"></div>
         </div>
         <div class="${styles.infoBoxLargePDF}">
-          <h2 class="${styles.infoTitle}">Commits Over Time</h2>
+          <h2 class="${styles.infoTitlePDF}">Commits Over Time</h2>
           <div id="chart-commits-placeholder"></div>
         </div>
        
@@ -195,8 +195,13 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
     doc.addImage(imgDataPart1, 'PNG', 10, position, 190, imgHeightPart1);
     position += imgHeightPart1;
 
-    // Remove the first container from the DOM after capturing
-    document.body.removeChild(container);
+
+    // document.body.removeChild(container);
+    if (document.body.contains(container)) {
+      document.body.removeChild(container);
+    } else {
+      console.error('Container not found in the DOM');
+    }
 
     // Add a new page for the second container
     doc.addPage();
@@ -210,7 +215,7 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
     container2.innerHTML = `
       <div class="${styles.infoContainer}">
         <div class="${styles.infoBoxLargePDF}">
-          <h2 class="${styles.infoTitle}">Pulls Over Time</h2>
+          <h2 class="${styles.infoTitlePDF}">Pulls Over Time</h2>
           <div id="chart-pulls-placeholder"></div>
         </div>
       </div>
@@ -227,45 +232,32 @@ const generatePDF = async (repoInfoList,chartImageCommitsPie, chartImagePullsPie
       chartPullsPlaceholder.appendChild(chartPullsImg);
     }
 
-    // const canvas = await html2canvas(container, { scale: 2 });
-    // const imgData = canvas.toDataURL('image/png');
 
-    // const imgHeight = (canvas.height * 190) / canvas.width;
-    // let position = 10;
     const canvasPart2 = await html2canvas(container2, { scale: 2 });
     const imgDataPart2 = canvasPart2.toDataURL('image/png');
     const imgHeightPart2 = (canvasPart2.height * 190) / canvasPart2.width;
 
-    // Add the captured part to the PDF, checking if it fits the current page
-    // if (position + imgHeightPart2 > pageHeight) {
-    //   doc.addPage();
-    //   position = 10;
-    // }
+ 
     doc.addImage(imgDataPart2, 'PNG', 10, position, 190, imgHeightPart2);
     position += imgHeightPart2;
 
-    // if (repoIndex > 0) {
-    //   doc.addPage();
-    //   position = 10;
-    // }
+   
+
 
     if(repoIndex < repoInfoList.length-1){
       doc.addPage();
       position = 10;
     }
 
-    // doc.addImage(imgData, 'PNG', 10, position, 190, imgHeight);
-    // position += imgHeight;
+    if (document.body.contains(container2)) {
+      document.body.removeChild(container2);
+    } else {
+      console.error('Container2 not found in the DOM');
+    }
 
 
 
-    // if (chartImagePullsLine) {
-    //   doc.addPage();
-    //   doc.addImage(chartImagePullsLine, 'PNG', 10, 10, 190, 100);
-    // }
-
-
-    document.body.removeChild(container2);
+    // document.body.removeChild(container2);
   }
 
   doc.save('repo-info.pdf');
