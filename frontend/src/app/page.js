@@ -226,8 +226,8 @@ export default function Home() {
             <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
             <p><strong>Created:</strong> {repoInfo.repoData.created_at}</p>
             <p><strong>Updated:</strong> {repoInfo.repoData.updated_at}</p>
-            <p><strong>Language:</strong> {repoInfo.repoData.language}</p>
             <p><strong>Size:</strong> {repoInfo.repoData.size}</p>
+            <p><strong>Number of Commits:</strong> {repoInfo.commits.length}</p>
             <p><strong>Number of Pull Requests:</strong> {repoInfo.pulls.length}</p>
           </div>
 
