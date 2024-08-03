@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TermProjects should render correctly with a non-empty array 1`] = `undefined`;
+
+exports[`heading component renders a heading 1`] = `undefined`;

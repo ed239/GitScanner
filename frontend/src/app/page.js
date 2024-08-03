@@ -79,6 +79,7 @@ export default function Home() {
      
       console.log(data);
       const repoInfoArray = Object.values(data);
+      console.log("repoInfoArray",JSON.stringify(repoInfoArray));
       setRepoInfoList(repoInfoArray);
       setIsLoading(false);
       
@@ -115,28 +116,28 @@ export default function Home() {
       case 'pullsLine':
         setChartImagePullsLine(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
       case 'commitsLine':
         setChartImageCommitsLine(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
       case 'commitsPie':
         setChartImageCommitsPie(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
       case 'pullsPie':
         setChartImagePullsPie(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
@@ -226,8 +227,8 @@ export default function Home() {
             <p><strong>Description:</strong> {repoInfo.repoData.description}</p>
             <p><strong>Created:</strong> {repoInfo.repoData.created_at}</p>
             <p><strong>Updated:</strong> {repoInfo.repoData.updated_at}</p>
-            <p><strong>Language:</strong> {repoInfo.repoData.language}</p>
             <p><strong>Size:</strong> {repoInfo.repoData.size}</p>
+            <p><strong>Number of Commits:</strong> {repoInfo.commits.length}</p>
             <p><strong>Number of Pull Requests:</strong> {repoInfo.pulls.length}</p>
           </div>
 
@@ -254,13 +255,15 @@ export default function Home() {
             <h2 className={styles.infoTitle}>Contributor Commits</h2>
             {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
               <ul>
-                {repoInfo.contributors.map((contributor) => (
-                  <li key={contributor.id}>
-                    <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
-                      {contributor.login}: {contributor.contributions}
-                    </a>
-                  </li>
-                ))}
+                {repoInfo.contributors
+                  .sort((a, b) => a.login.localeCompare(b.login)) // Sorting contributors alphabetically by login
+                  .map((contributor) => (
+                    <li key={contributor.id}>
+                      <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
+                        {contributor.login}: {contributor.contributions}
+                      </a>
+                    </li>
+                  ))}
               </ul>
             ) : (
               <p>No contributors found.</p>
@@ -271,15 +274,17 @@ export default function Home() {
           <div className={styles.infoBoxPie}>
               <h2 className={styles.infoTitle}>Contributor Pull Requests</h2>
               {repoInfo.pullRequestsByContributor && Object.keys(repoInfo.pullRequestsByContributor).length > 0 ? (
-              <ul>
-                {Object.keys(repoInfo.pullRequestsByContributor).map((username, index) => (
-                  <li key={username}>
-                    <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
-                      {username}: {Object.values(repoInfo.pullRequestsByContributor)[index]}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                <ul>
+                  {Object.keys(repoInfo.pullRequestsByContributor)
+                    .sort((a, b) => a.localeCompare(b)) // Sorting the usernames alphabetically
+                    .map((username) => (
+                      <li key={username}>
+                        <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
+                          {username}: {repoInfo.pullRequestsByContributor[username]}
+                        </a>
+                      </li>
+                    ))}
+                </ul>
             ) : (
                 <p>No contributors found.</p>
               )}
