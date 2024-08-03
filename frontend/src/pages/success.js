@@ -11,6 +11,7 @@ export default function Success() {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         localStorage.setItem('token', token);
+        console.log("Use effect of Success Page")
         router.push('/')
     });
 
