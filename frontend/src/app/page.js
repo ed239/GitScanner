@@ -79,6 +79,7 @@ export default function Home() {
      
       console.log(data);
       const repoInfoArray = Object.values(data);
+      console.log("repoInfoArray",JSON.stringify(repoInfoArray));
       setRepoInfoList(repoInfoArray);
       setIsLoading(false);
       
@@ -115,28 +116,28 @@ export default function Home() {
       case 'pullsLine':
         setChartImagePullsLine(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
       case 'commitsLine':
         setChartImageCommitsLine(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
       case 'commitsPie':
         setChartImageCommitsPie(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
       case 'pullsPie':
         setChartImagePullsPie(prev => {
           const newCharts = [...prev];
-          newCharts[repoIndex] = imgSrc;
+          newCharts[repoIndex] = imgSrc; 
           return newCharts;
         });
         break;
