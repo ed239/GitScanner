@@ -41,6 +41,15 @@ import axios from 'axios';
 
 
 export default async function handler(req, res) {
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so we add 1
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+
+  };
   if (req.method === 'POST') {
     const { link } = req.body;
     const authHeader = req.headers.authorization;
@@ -54,9 +63,13 @@ export default async function handler(req, res) {
         }
       } : {};
     
+  
 
       const repoResponse = await axios.get(`https://api.github.com/repos/${link}`, config);
       const repoData = repoResponse.data;
+
+      repoData.created_at = formatDate(repoData.created_at);
+      repoData.updated_at = formatDate(repoData.updated_at);
 
 
       const contributorsResponse = await axios.get(`https://api.github.com/repos/${link}/contributors`, config);
@@ -89,6 +102,20 @@ export default async function handler(req, res) {
         
       });
 
+      const commitsByContributor = {};
+      commitsData.forEach(commit => {
+       
+        if(commit.author != null && commit.author.login != null){
+            const author = commit.author.login;
+            if (!commitsByContributor[author]) {
+              commitsByContributor[author] = 0;
+            }
+            commitsByContributor[author] += 1;
+        }
+      
+        
+      });
+
      
 
       res.status(200).json({
@@ -97,17 +124,29 @@ export default async function handler(req, res) {
         pulls: pullsData,
         commits: commitsData,
         pullRequestsByContributor,
+        commitsByContributor,
         languages: languageData,
       });
      
     } catch (error) {
-      console.error('GitHub API error:', error.response.statusText);
-      if (error.response && error.response.statusText === 'rate limit exceeded') {
-        res.status(429).json({ error: 'GitHub API rate limit exceeded' }); 
-      } else {
-        res.status(500).json({ error: 'GitHub API error' });
-      }
       
+    
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+    
+        if (error.response.status === 403 && error.response.data.message === 'rate limit exceeded') {
+          res.status(429).json({ error: 'GitHub API rate limit exceeded' });
+        } else {
+          res.status(500).json({ error: 'GitHub API error' });
+        }
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+        res.status(500).json({ error: 'No response received from GitHub API' });
+      } else {
+        console.error('Error setting up request:', error.message);
+        res.status(500).json({ error: 'Error setting up request' });
+      }
     }
   } else {
     res.status(405).json({ error: 'Method not allowed' });
