@@ -79,7 +79,7 @@ export default function Home() {
      
       console.log(data);
       const repoInfoArray = Object.values(data);
-      console.log("repoInfoArray",JSON.stringify(repoInfoArray));
+  
       setRepoInfoList(repoInfoArray);
       setIsLoading(false);
       
@@ -253,18 +253,18 @@ export default function Home() {
 
           <div className={styles.infoBoxPie}>
             <h2 className={styles.infoTitle}>Contributor Commits</h2>
-            {repoInfo.contributors && repoInfo.contributors.length > 0 ? (
-              <ul>
-                {repoInfo.contributors
-                  .sort((a, b) => a.login.localeCompare(b.login)) // Sorting contributors alphabetically by login
-                  .map((contributor) => (
-                    <li key={contributor.id}>
-                      <a href={contributor.html_url} target="_blank" rel="noopener noreferrer">
-                        {contributor.login}: {contributor.contributions}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
+            {repoInfo.commitsByContributor && Object.keys(repoInfo.commitsByContributor).length > 0 ? (
+                <ul>
+                  {Object.keys(repoInfo.commitsByContributor)
+                    .sort((a, b) => a.localeCompare(b)) // Sorting the usernames alphabetically
+                    .map((username) => (
+                      <li key={username}>
+                        <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
+                          {username}: {repoInfo.commitsByContributor[username]}
+                        </a>
+                      </li>
+                    ))}
+                </ul>
             ) : (
               <p>No contributors found.</p>
             )}
